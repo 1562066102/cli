@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "workspaces": [
+    "package/*"
+  ],
+  "scripts": {
+    "format": "prettier --write package",
+    "lint": "eslint --ext .js package",
+    "fix": "eslint --fix --ext .js package",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.1",
+    "@commitlint/config-conventional": "^16.2.1",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.5",
+    "prettier": "^2.5.1"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "黄云辉",
+    "url": "https://github.com/1562066102"
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "npm run fix",
+      "npm run format"
+    ]
+  }
+}
