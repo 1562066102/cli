@@ -4,13 +4,24 @@ const fs = require('fs');
 const fsPromises = require('fs/promises');
 const path = require('path');
 const inquirer = require('inquirer');
+const {spawn} = require('child_process');
+const which = require('which');
 const log = require('../tool/log');
 
+/** 交互问题列表 */
 const questions = [
   {
     name: 'name',
     message: '请输入项目名称？',
     default: 'web-app',
+    validate(value) {
+      const done = this.async();
+      const reg = new RegExp(
+        '^(?:@[a-z0-9-*~][a-z0-9-*._~]*/)?[a-z0-9-~][a-z0-9-._~]*$'
+      );
+      if (!reg.test(value)) return void done('名称包含非法字符!!!');
+      done(null, true);
+    },
   },
   {
     name: 'description',
@@ -27,6 +38,37 @@ const questions = [
     choices: [],
   },
 ];
+
+/**
+ * 运行npm/yarn脚本命令（通过子进程）
+ * @param {string[]} args 命令参数
+ * @return {Promise<number>}
+ */
+function runNpmCommand(args, useYarn = true) {
+  return new Promise((resolve, reject) => {
+    const npm = which.sync(process.platform === 'win32' ? 'npm.cmd' : 'npm');
+    const yarn = which.sync('yarn');
+    const runner = spawn(useYarn ? yarn : npm, args, {stdio: 'inherit'});
+    runner.on('close', resolve);
+    runner.on('error', reject);
+  });
+}
+
+/**
+ * 更新package.json文件
+ * @param {string} path
+ * @param {object} options
+ * @return {Promise<void>}
+ */
+async function updatePackageJSON(filePath, options = {}) {
+  const data = await fsPromises.readFile(filePath);
+  const jsonData = {
+    ...options,
+    ...JSON.parse(data.toString()),
+    template: undefined,
+  };
+  await fsPromises.writeFile(filePath, JSON.stringify(jsonData, null, 2));
+}
 
 /**
  * 复制文件（采用计数法）
@@ -80,7 +122,6 @@ function copy(sourcePath, targetPath) {
 async function createTargetDir(targetDirName) {
   const targetPath = path.join(process.cwd(), targetDirName);
   await fsPromises.mkdir(targetPath);
-  // process.chdir(targetPath);
   return targetPath;
 }
 
@@ -99,11 +140,21 @@ async function init() {
       return {...item};
     })
   );
-  log('-------- generating -------');
+
+  log('\n\n-------- generating -------');
   const sourcePath = path.join(__dirname, `../template/${answer.template}`);
   const targetPath = await createTargetDir(answer.name);
+  const packageJSONPath = path.join(targetPath, 'package.json');
   await copy(sourcePath, targetPath);
+  await updatePackageJSON(packageJSONPath, answer);
   log('-------- generated -------');
+
+  log('\n\n-------- Installing -------');
+  process.chdir(targetPath);
+  await runNpmCommand(['install']);
+  log('-------- installed -------');
+
+  log('\n\n现在愉快的开发吧🎉🎉🎉');
 }
 
 module.exports = init;
