@@ -1,0 +1,19 @@
+{
+  "name": "@huangyunhui/hyh-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "hyh-scripts": "./bin/index.js"
+  },
+  "scripts": {},
+  "author": {
+    "name": "黄云辉",
+    "url": "https://github.com/1562066102"
+  },
+  "keywords": [
+    "cli",
+    "React",
+    "Vue"
+  ],
+  "license": "MIT"
+}
