@@ -1,19 +1,16 @@
 'use strict';
 
-const path = require('path');
 const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-/** 当前node进程工作路径 */
-const workPath = process.cwd();
+const paths = require('../tool/paths');
 
 module.exports = {
-  entry: path.resolve(workPath, 'main.js'),
+  entry: paths.entry,
   output: {
     filename: 'static/js/[name].[contenthash:8].js',
-    path: path.resolve(workPath, 'dist'),
+    path: paths.output,
     clean: true,
     assetModuleFilename: 'static/media/[name].[hash:8][ext]', // 资源路径
   },
@@ -23,7 +20,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': path.resolve(workPath, 'src'),
+      '@': paths.src,
     },
     extensions: ['.tsx', '.ts', 'jsx', '.js'], // 尝试按顺序解析这些后缀名 使用户在引入模块时不带扩展名
   },
@@ -96,14 +93,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Web App',
       inject: true,
-      template: './public/index.html',
+      template: paths.html,
     }),
     // 复制public静态资源
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.resolve(workPath, 'public'),
-          to: path.resolve(workPath, 'dist'),
+          from: paths.public,
+          to: paths.output,
           globOptions: {
             ignore: ['**/index.html'],
           },
