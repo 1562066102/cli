@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "hyh-cli start",
+    "build": "hyh-cli build"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
