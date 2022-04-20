@@ -39,52 +39,87 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.txt$/i,
-        type: 'asset/source',
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset',
-        parser: {
-          dataUrlCondition: {
-            maxSize: 2 * 1024, // 低于2kb采用inline，否则采用resource
+        oneOf: [
+          {
+            test: /\.txt$/i,
+            type: 'asset/source',
           },
-        },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.(sass|scss)$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-      {
-        test: /\.less$/i,
-        use: ['style-loader', 'css-loader', 'less-loader'],
-      },
-      {
-        test: /\.(js|mjs|jsx|ts|tsx)$/i,
-        use: {
-          loader: require.resolve('babel-loader'),
-          options: {
-            presets: [
-              require.resolve('@babel/preset-env'),
-              [
-                require.resolve('@babel/preset-react'),
-                {
-                  runtime: 'automatic',
-                },
-              ],
-              require.resolve('@babel/preset-typescript'),
+          {
+            test: /\.(woff|woff2|eot|ttf|otf)$/i,
+            type: 'asset/resource',
+          },
+          {
+            test: /\.(png|svg|jpg|jpeg|gif)$/i,
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 2 * 1024, // 低于2kb采用inline，否则采用resource
+              },
+            },
+          },
+          {
+            test: /\.css$/i,
+            use: [
+              {
+                loader: require.resolve('style-loader'),
+              },
+              {
+                loader: require.resolve('css-loader'),
+              },
             ],
           },
-        },
-        exclude: /node_modules/,
+          {
+            test: /\.(sass|scss)$/i,
+            use: [
+              {
+                loader: require.resolve('style-loader'),
+              },
+              {
+                loader: require.resolve('css-loader'),
+              },
+              {
+                loader: require.resolve('sass-loader'),
+              },
+            ],
+          },
+          {
+            test: /\.less$/i,
+            use: [
+              {
+                loader: require.resolve('style-loader'),
+              },
+              {
+                loader: require.resolve('css-loader'),
+              },
+              {
+                loader: require.resolve('less-loader'),
+              },
+            ],
+          },
+          {
+            test: /\.(js|mjs|jsx|ts|tsx)$/i,
+            use: {
+              loader: require.resolve('babel-loader'),
+              options: {
+                presets: [
+                  require.resolve('@babel/preset-env'),
+                  [
+                    require.resolve('@babel/preset-react'),
+                    {
+                      runtime: 'automatic',
+                    },
+                  ],
+                  require.resolve('@babel/preset-typescript'),
+                ],
+              },
+            },
+            exclude: /node_modules/,
+          },
+          {
+            exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx)$/i, /\.html$/i, /\.json$/i],
+            type: 'asset/resource',
+          },
+        ],
       },
     ],
   },
