@@ -3,27 +3,40 @@
 'use strict';
 
 const program = require('commander');
-const start = require('../src/start');
-const build = require('../src/build');
-const test = require('../src/test');
+const init = require('../src/init');
 
 program.version('1.0.0');
 
-program.description('启动').command('start').action(start);
-
-program.description('构建').command('build').action(build);
+program
+  .description('启动')
+  .command('start')
+  .option(
+    '-a, --app-env <type>',
+    `指定业务环境，可选值:
+    development
+    test
+    release
+    production
+    `,
+    'development'
+  )
+  .action(init('start'));
 
 program
-  .description('测试')
-  .command('test')
+  .description('构建')
+  .command('build')
   .option(
-    '-d, --development',
-    '开发环境 process.env.APP_ENV = "development"',
-    true
+    '-a, --app-env <type>',
+    `指定业务环境，可选值:
+    development
+    test
+    release
+    production
+    `,
+    'development'
   )
-  .option('-t, --test', '测试环境 process.env.APP_ENV = "test"')
-  .option('-r, --pre-release', '预发环境 process.env.APP_ENV = "preRelease"')
-  .option('-p, --production', '生产环境 process.env.APP_ENV = "production"')
-  .action(test);
+  .action(init('build'));
+
+program.description('测试').command('test').action(init('test'));
 
 program.parse(process.argv);
