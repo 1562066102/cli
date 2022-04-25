@@ -14,7 +14,7 @@ const analyseUnknownExtensionPath = relativePath => {
 };
 
 const paths = {
-  env: analyseAppPath('env'),
+  env: analyseAppPath('.env'),
   entry: analyseUnknownExtensionPath('src/index'),
   output: analyseAppPath('dist'),
   src: analyseAppPath('src'),
