@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const paths = require('../tool/paths');
+const {getClientEnv} = require('../tool/env');
 
 module.exports = {
   entry: paths.entry,
@@ -151,10 +152,6 @@ module.exports = {
       clearConsole: true,
     }),
     // 全局变量注入
-    new Webpack.DefinePlugin({
-      BASE_URL: '"./"',
-      'process.env.NODE_ENV': '"development"',
-      'process.env.DEBUG': 'true',
-    }),
+    new Webpack.DefinePlugin(getClientEnv()),
   ],
 };
