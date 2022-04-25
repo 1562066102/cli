@@ -2,13 +2,11 @@
 
 const Webpack = require('webpack');
 const mergeWebpackConfig = require('../tool/merge');
-
-const nodeEnv = 'production';
+const log = require('../tool/log');
 
 function build() {
-  process.env.NODE_ENV = nodeEnv;
-  console.log('building server...');
-  const config = mergeWebpackConfig(nodeEnv);
+  log('building server...', 'cyan');
+  const config = mergeWebpackConfig();
   Webpack(config, (err, stats) => {
     if (err || stats.hasErrors()) {
       console.log(err);
