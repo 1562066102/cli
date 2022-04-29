@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 const paths = require('./paths');
 
+delete require.cache[require.resolve('./paths')];
+
 /** 往node中注入环境变量
  * @description 包含本地、客户端env文件中的环境变量（仅包含 .env .env.development .env.production）
  */
