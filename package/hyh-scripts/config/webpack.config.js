@@ -2,7 +2,6 @@
 
 const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const paths = require('../tool/paths');
 const {getClientEnv} = require('../tool/env');
@@ -142,14 +141,6 @@ module.exports = {
           },
         },
       ],
-    }),
-    // webpack日志美化
-    new FriendlyErrorsWebpackPlugin({
-      compilationSuccessInfo: {
-        messages: ['You application is running here http://localhost:8080'],
-        notes: ['Some additional notes'],
-      },
-      clearConsole: true,
     }),
     // 全局变量注入
     new Webpack.DefinePlugin(getClientEnv()),

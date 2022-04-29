@@ -2,6 +2,7 @@
 
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const paths = require('../tool/paths');
 
 module.exports = {
   mode: 'production',
@@ -10,8 +11,8 @@ module.exports = {
     new FileManagerPlugin({
       events: {
         onEnd: {
-          delete: ['./dist.zip'],
-          archive: [{source: './dist', destination: './dist.zip'}],
+          delete: [`${paths.output}.zip`],
+          archive: [{source: paths.output, destination: `${paths.output}.zip`}],
         },
       },
     }),
